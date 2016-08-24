@@ -1,0 +1,5 @@
+/MDK-ARM/APP2
+/MDK-ARM/RTE
+/MDK-ARM/*.lst
+/MDK-ARM/DebugConfig
+/MDK-ARM/*.uvguix.*
