@@ -109,8 +109,8 @@
 #define PWM_E_VREF_GPIO_Port GPIOA
 #define Z_MAX_Pin GPIO_PIN_15
 #define Z_MAX_GPIO_Port GPIOA
-#define INT_POWER_OFF_Pin GPIO_PIN_3
-#define INT_POWER_OFF_GPIO_Port GPIOD
+#define INT_POWER_Pin GPIO_PIN_3
+#define INT_POWER_GPIO_Port GPIOD
 #define Z_MOTOR_EN_Pin GPIO_PIN_6
 #define Z_MOTOR_EN_GPIO_Port GPIOD
 #define LCD_LIGHT_UP_Pin GPIO_PIN_5

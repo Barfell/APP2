@@ -687,11 +687,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : INT_POWER_OFF_Pin */
-  GPIO_InitStruct.Pin = INT_POWER_OFF_Pin;
+  /*Configure GPIO pin : INT_POWER_Pin */
+  GPIO_InitStruct.Pin = INT_POWER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(INT_POWER_OFF_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(INT_POWER_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LCD_LIGHT_UP_Pin */
   GPIO_InitStruct.Pin = LCD_LIGHT_UP_Pin;
