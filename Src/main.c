@@ -61,8 +61,7 @@ UART_HandleTypeDef huart1;
 HCD_HandleTypeDef hhcd_USB_OTG_HS;
 
 SRAM_HandleTypeDef hsram1;
-osThreadId defaultTaskHandle;
-osThreadId initTaskHandle;
+osThreadId startInitTaskHandle;
 osThreadId refDataTaskHandle;
 osThreadId readUdiskTaskHandle;
 osThreadId printTaskHandle;
@@ -94,8 +93,7 @@ static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USB_OTG_HS_HCD_Init(void);
 static void MX_TIM5_Init(void);
-void StartDefaultTask(void const * argument);
-void InitTask(void const * argument);
+void StartInitTask(void const * argument);
 void RefDataTask(void const * argument);
 void ReadUdiskTask(void const * argument);
 void PrintTask(void const * argument);
@@ -181,13 +179,9 @@ int main(void)
   /* USER CODE END RTOS_TIMERS */
 
   /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
-
-  /* definition and creation of initTask */
-  osThreadDef(initTask, InitTask, osPriorityRealtime, 0, 640);
-  initTaskHandle = osThreadCreate(osThread(initTask), NULL);
+  /* definition and creation of startInitTask */
+  osThreadDef(startInitTask, StartInitTask, osPriorityRealtime, 0, 640);
+  startInitTaskHandle = osThreadCreate(osThread(startInitTask), NULL);
 
   /* definition and creation of refDataTask */
   osThreadDef(refDataTask, RefDataTask, osPriorityNormal, 0, 640);
@@ -761,8 +755,8 @@ static void MX_FSMC_Init(void)
 
 /* USER CODE END 4 */
 
-/* StartDefaultTask function */
-void StartDefaultTask(void const * argument)
+/* StartInitTask function */
+void StartInitTask(void const * argument)
 {
   /* init code for FATFS */
   MX_FATFS_Init();
@@ -777,18 +771,6 @@ void StartDefaultTask(void const * argument)
     osDelay(1);
   }
   /* USER CODE END 5 */ 
-}
-
-/* InitTask function */
-void InitTask(void const * argument)
-{
-  /* USER CODE BEGIN InitTask */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END InitTask */
 }
 
 /* RefDataTask function */
