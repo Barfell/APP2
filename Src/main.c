@@ -72,7 +72,7 @@ osMessageQId gcodeCommandHandle;
 osSemaphoreId guiSendSemHandle;
 osSemaphoreId guiWaitSemHandle;
 osSemaphoreId readUdiskSemHandle;
-osSemaphoreId RecUartCmdSemHandle;
+osSemaphoreId recUartCmdSemHandle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -95,12 +95,12 @@ static void MX_TIM4_Init(void);
 static void MX_USB_OTG_HS_HCD_Init(void);
 static void MX_TIM5_Init(void);
 void StartDefaultTask(void const * argument);
-void InitTask_Func(void const * argument);
-void RefDataTask_Func(void const * argument);
-void ReadUdiskTask_Func(void const * argument);
-void PrintTask_Func(void const * argument);
-void GuiTask_func(void const * argument);
-void RespondGuiTask_func(void const * argument);
+void InitTask(void const * argument);
+void RefDataTask(void const * argument);
+void ReadUdiskTask(void const * argument);
+void PrintTask(void const * argument);
+void GuiTask(void const * argument);
+void RespondGuiTask(void const * argument);
 static void MX_NVIC_Init(void);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
@@ -168,9 +168,9 @@ int main(void)
   osSemaphoreDef(readUdiskSem);
   readUdiskSemHandle = osSemaphoreCreate(osSemaphore(readUdiskSem), 2);
 
-  /* definition and creation of RecUartCmdSem */
-  osSemaphoreDef(RecUartCmdSem);
-  RecUartCmdSemHandle = osSemaphoreCreate(osSemaphore(RecUartCmdSem), 2);
+  /* definition and creation of recUartCmdSem */
+  osSemaphoreDef(recUartCmdSem);
+  recUartCmdSemHandle = osSemaphoreCreate(osSemaphore(recUartCmdSem), 2);
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
   /* add semaphores, ... */
@@ -186,27 +186,27 @@ int main(void)
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of initTask */
-  osThreadDef(initTask, InitTask_Func, osPriorityRealtime, 0, 640);
+  osThreadDef(initTask, InitTask, osPriorityRealtime, 0, 640);
   initTaskHandle = osThreadCreate(osThread(initTask), NULL);
 
   /* definition and creation of refDataTask */
-  osThreadDef(refDataTask, RefDataTask_Func, osPriorityNormal, 0, 640);
+  osThreadDef(refDataTask, RefDataTask, osPriorityNormal, 0, 640);
   refDataTaskHandle = osThreadCreate(osThread(refDataTask), NULL);
 
   /* definition and creation of readUdiskTask */
-  osThreadDef(readUdiskTask, ReadUdiskTask_Func, osPriorityBelowNormal, 0, 640);
+  osThreadDef(readUdiskTask, ReadUdiskTask, osPriorityBelowNormal, 0, 640);
   readUdiskTaskHandle = osThreadCreate(osThread(readUdiskTask), NULL);
 
   /* definition and creation of printTask */
-  osThreadDef(printTask, PrintTask_Func, osPriorityLow, 0, 640);
+  osThreadDef(printTask, PrintTask, osPriorityLow, 0, 640);
   printTaskHandle = osThreadCreate(osThread(printTask), NULL);
 
   /* definition and creation of guiTask */
-  osThreadDef(guiTask, GuiTask_func, osPriorityIdle, 0, 640);
+  osThreadDef(guiTask, GuiTask, osPriorityIdle, 0, 640);
   guiTaskHandle = osThreadCreate(osThread(guiTask), NULL);
 
   /* definition and creation of respondGuiTask */
-  osThreadDef(respondGuiTask, RespondGuiTask_func, osPriorityAboveNormal, 0, 640);
+  osThreadDef(respondGuiTask, RespondGuiTask, osPriorityAboveNormal, 0, 640);
   respondGuiTaskHandle = osThreadCreate(osThread(respondGuiTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
@@ -779,76 +779,76 @@ void StartDefaultTask(void const * argument)
   /* USER CODE END 5 */ 
 }
 
-/* InitTask_Func function */
-void InitTask_Func(void const * argument)
+/* InitTask function */
+void InitTask(void const * argument)
 {
-  /* USER CODE BEGIN InitTask_Func */
+  /* USER CODE BEGIN InitTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END InitTask_Func */
+  /* USER CODE END InitTask */
 }
 
-/* RefDataTask_Func function */
-void RefDataTask_Func(void const * argument)
+/* RefDataTask function */
+void RefDataTask(void const * argument)
 {
-  /* USER CODE BEGIN RefDataTask_Func */
+  /* USER CODE BEGIN RefDataTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END RefDataTask_Func */
+  /* USER CODE END RefDataTask */
 }
 
-/* ReadUdiskTask_Func function */
-void ReadUdiskTask_Func(void const * argument)
+/* ReadUdiskTask function */
+void ReadUdiskTask(void const * argument)
 {
-  /* USER CODE BEGIN ReadUdiskTask_Func */
+  /* USER CODE BEGIN ReadUdiskTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END ReadUdiskTask_Func */
+  /* USER CODE END ReadUdiskTask */
 }
 
-/* PrintTask_Func function */
-void PrintTask_Func(void const * argument)
+/* PrintTask function */
+void PrintTask(void const * argument)
 {
-  /* USER CODE BEGIN PrintTask_Func */
+  /* USER CODE BEGIN PrintTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END PrintTask_Func */
+  /* USER CODE END PrintTask */
 }
 
-/* GuiTask_func function */
-void GuiTask_func(void const * argument)
+/* GuiTask function */
+void GuiTask(void const * argument)
 {
-  /* USER CODE BEGIN GuiTask_func */
+  /* USER CODE BEGIN GuiTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END GuiTask_func */
+  /* USER CODE END GuiTask */
 }
 
-/* RespondGuiTask_func function */
-void RespondGuiTask_func(void const * argument)
+/* RespondGuiTask function */
+void RespondGuiTask(void const * argument)
 {
-  /* USER CODE BEGIN RespondGuiTask_func */
+  /* USER CODE BEGIN RespondGuiTask */
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
   }
-  /* USER CODE END RespondGuiTask_func */
+  /* USER CODE END RespondGuiTask */
 }
 
 /**

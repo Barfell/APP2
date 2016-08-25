@@ -1,6 +1,6 @@
 [PreviousGenFiles]
-HeaderPath=C:/Users/fangyb/Documents/Documents/STM32_RE/APP2/Inc
-SourcePath=C:/Users/fangyb/Documents/Documents/STM32_RE/APP2/Src
+HeaderPath=C:/Users/fangyb/Documents/Documents/APP2/Inc
+SourcePath=C:/Users/fangyb/Documents/Documents/APP2/Src
 SourceFiles=ffconf.h;bsp_driver_sd.h;fatfs.h;fatfs_platform.h;FreeRTOSConfig.h;usb_host.h;usbh_conf.h;stm32f4xx_it.h;stm32f4xx_hal_conf.h;mxconstants.h;bsp_driver_sd.c;fatfs.c;fatfs_platform.c;freertos.c;usb_host.c;usbh_conf.c;stm32f4xx_it.c;stm32f4xx_hal_msp.c;stm32f4xx_hal_timebase_TIM.c;main.c;
 HeaderFiles=ffconf.h;bsp_driver_sd.h;fatfs.h;fatfs_platform.h;FreeRTOSConfig.h;usb_host.h;usbh_conf.h;stm32f4xx_it.h;stm32f4xx_hal_conf.h;mxconstants.h;
 
