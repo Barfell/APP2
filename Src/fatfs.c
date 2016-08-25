@@ -39,10 +39,11 @@ uint8_t retUSBH;    /* Return value for USBH */
 char USBH_Path[4];  /* USBH logical drive path */
 
 /* USER CODE BEGIN Variables */
+FATFS USBDISKFatFs;           /* File system object for USB Disk logical drive */
+FATFS SDCardFatFs;            /* File system object for SD Card logical drive */
+/* USER CODE END Variables */
 
-/* USER CODE END Variables */    
-
-void MX_FATFS_Init(void) 
+void MX_FATFS_Init(void)
 {
   /*## FatFS: Link the SD driver ###########################*/
   retSD = FATFS_LinkDriver(&SD_Driver, SD_Path);
@@ -50,12 +51,12 @@ void MX_FATFS_Init(void)
   retUSBH = FATFS_LinkDriver(&USBH_Driver, USBH_Path);
 
   /* USER CODE BEGIN Init */
-  /* additional user code for init */     
+  /* additional user code for init */
   /* USER CODE END Init */
 }
 
 /**
-  * @brief  Gets Time from RTC 
+  * @brief  Gets Time from RTC
   * @param  None
   * @retval Time in DWORD
   */
@@ -63,11 +64,58 @@ DWORD get_fattime(void)
 {
   /* USER CODE BEGIN get_fattime */
   return 0;
-  /* USER CODE END get_fattime */  
+  /* USER CODE END get_fattime */
 }
 
 /* USER CODE BEGIN Application */
-     
+
+void SDCard_Mount(void)
+{
+  if(f_mount(&SDCardFatFs, (TCHAR const*)SD_Path, 0) == FR_OK)
+  {
+    (void)printf("SDCard f_mount ok!\r\n");
+  }
+  else
+  {
+    (void)printf("SDCard f_mount not ok!\r\n");
+  }
+}
+
+void SDCard_UnMount(void)
+{
+  if(f_mount(NULL, (TCHAR const*)SD_Path, 0) == FR_OK)
+  {
+    (void)printf("SDCard f_unmount ok!\r\n");
+  }
+  else
+  {
+    (void)printf("SDCard f_unmount not ok!\r\n");
+  }
+}
+
+void USBDisk_Mount(void)
+{
+  if(f_mount(&USBDISKFatFs, (TCHAR const*)USBH_Path, 0) == FR_OK)
+  {
+    (void)printf("USB f_mount ok!\r\n");
+  }
+  else
+  {
+    (void)printf("USB f_mount not ok!\r\n");
+  }
+}
+
+void USBDisk_UnMount(void)
+{
+  if(f_mount(NULL, (TCHAR const*)USBH_Path, 0) == FR_OK)
+  {
+    (void)printf("USB f_unmount ok!\r\n");
+  }
+  else
+  {
+    (void)printf("USB f_unmount not ok!\r\n");
+  }
+}
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

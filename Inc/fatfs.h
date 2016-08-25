@@ -35,7 +35,7 @@
 #ifndef __fatfs_H
 #define __fatfs_H
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 #include "ff.h"
@@ -55,7 +55,10 @@ extern char USBH_Path[4]; /* USBH logical drive path */
 void MX_FATFS_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void SDCard_Mount(void);
+void SDCard_UnMount(void);
+void USBDisk_Mount(void);
+void USBDisk_UnMount(void);
 /* USER CODE END Prototypes */
 #ifdef __cplusplus
 }
