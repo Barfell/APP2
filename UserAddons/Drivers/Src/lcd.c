@@ -4,7 +4,7 @@
 
 //LCD的画笔颜色和背景色
 uint16_t POINT_COLOR=0x0000; //画笔颜色
-uint16_t BACK_COLOR=0xFFFF;  //背景色
+uint16_t BACK_COLOR=BLACK;  //背景色
 
 //管理LCD重要参数
 _lcd_dev lcddev;
@@ -64,7 +64,7 @@ void LCD_WriteReg(__IO uint16_t LCD_Reg, __IO uint16_t LCD_RegValue)
 uint16_t LCD_ReadReg(__IO uint16_t LCD_Reg)
 {
   LCD_WR_REG(LCD_Reg);  //写入要读的寄存器序号
-  HAL_Delay(1);//delay_us(5);
+  HAL_Delay(5);//delay_us(5);
   return LCD_RD_DATA(); //返回读到的值
 }
 
@@ -395,17 +395,22 @@ void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode)
   for(t=0; t<csize; t++)
   {
     //调用1206字体
-    if(size==12)temp=asc2_1206[num][t];
+    if(size==12)
+      temp=asc2_1206[num][t];
     //调用1608字体
-    else if(size==16)temp=asc2_1608[num][t];
+    else if(size==16)
+      temp=asc2_1608[num][t];
     //调用2412字体
-    else if(size==24)temp=asc2_2412[num][t];
+    else if(size==24)
+      temp=asc2_2412[num][t];
     //没有的字库
     else return;
     for(t1=0; t1<8; t1++)
     {
-      if(temp&0x80)LCD_Fast_DrawPoint(x,y,POINT_COLOR);
-      else if(mode==0)LCD_Fast_DrawPoint(x,y,BACK_COLOR);
+      if(temp&0x80)
+        LCD_Fast_DrawPoint(x,y,POINT_COLOR);
+      else if(mode==0)
+        LCD_Fast_DrawPoint(x,y,BACK_COLOR);
       temp<<=1;
       y++;
       //超区域了
@@ -1498,7 +1503,7 @@ static void LCD_Init_NT35310(void)
   LCD_WR_DATA(0x55);	//66
 
   LCD_WR_REG(0x11);
-  HAL_Delay(1);//delay_ms(100);
+  HAL_Delay(100);//delay_ms(100);
   LCD_WR_REG(0x29);
   LCD_WR_REG(0x35);
   LCD_WR_DATA(0x00);
