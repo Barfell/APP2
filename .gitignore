@@ -3,3 +3,4 @@
 /MDK-ARM/*.lst
 /MDK-ARM/DebugConfig
 /MDK-ARM/*.uvguix.*
+/MDK-ARM/JLink*
