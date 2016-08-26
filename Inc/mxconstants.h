@@ -65,8 +65,6 @@
 #define X_MOTOR_EN_GPIO_Port GPIOC
 #define Z_MIN_Pin GPIO_PIN_0
 #define Z_MIN_GPIO_Port GPIOA
-#define TIM5_CH2_PWM_FAN_Pin GPIO_PIN_1
-#define TIM5_CH2_PWM_FAN_GPIO_Port GPIOA
 #define PWM_BEEP_Pin GPIO_PIN_2
 #define PWM_BEEP_GPIO_Port GPIOA
 #define X_MOTOR_DIR_Pin GPIO_PIN_3

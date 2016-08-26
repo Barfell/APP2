@@ -50,6 +50,7 @@ typedef enum {
 }ApplicationTypeDef;
 		
 void MX_USB_HOST_Init(void);
+void MX_USB_HOST_Process(void);
 
 #ifdef __cplusplus
 }
