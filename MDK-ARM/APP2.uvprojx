@@ -334,7 +334,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;    ../Drivers/STM32F4xx_HAL_Driver/Inc;    ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;    ../Middlewares/Third_Party/FatFs/src/drivers;    ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc;    ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc;    ../Middlewares/Third_Party/FatFs/src;    ../Drivers/CMSIS/Include;    ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;    ..\UserAddons\Drivers\Inc</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Middlewares/Third_Party/FatFs/src/drivers;../Middlewares/ST/STM32_USB_Host_Library/Core/Inc;../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc;../Middlewares/Third_Party/FatFs/src;../Drivers/CMSIS/Include;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;..\UserAddons\Drivers\Inc;..\UserAddons\IAP\Inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -656,6 +656,26 @@
               <FileName>lcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\UserAddons\Drivers\Src\lcd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>UserAddons/IAP</GroupName>
+          <Files>
+            <File>
+              <FileName>command.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserAddons\IAP\Src\command.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_if.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserAddons\IAP\Src\flash_if.c</FilePath>
+            </File>
+            <File>
+              <FileName>iap_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\UserAddons\IAP\Src\iap_menu.c</FilePath>
             </File>
           </Files>
         </Group>

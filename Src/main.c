@@ -37,6 +37,7 @@
 
 /* USER CODE BEGIN Includes */
 #include "lcd.h"
+#include "iap_menu.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
