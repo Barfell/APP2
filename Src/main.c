@@ -49,8 +49,6 @@ HAL_SD_CardInfoTypedef SDCardInfo;
 DMA_HandleTypeDef hdma_sdio_rx;
 DMA_HandleTypeDef hdma_sdio_tx;
 
-UART_HandleTypeDef huart1;
-
 HCD_HandleTypeDef hhcd_USB_OTG_HS;
 
 SRAM_HandleTypeDef hsram1;
@@ -67,10 +65,9 @@ static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_FSMC_Init(void);
-static void MX_CRC_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_USB_OTG_HS_HCD_Init(void);
+static void MX_CRC_Init(void);
 static void MX_NVIC_Init(void);
 void MX_USB_HOST_Process(void);
 
@@ -140,10 +137,9 @@ int main(void)
   MX_USB_HOST_Init();
   MX_SDIO_SD_Init();
   MX_FSMC_Init();
-  MX_CRC_Init();
-  MX_USART1_UART_Init();
   MX_ADC1_Init();
   MX_USB_OTG_HS_HCD_Init();
+  MX_CRC_Init();
 
   /* Initialize interrupts */
   MX_NVIC_Init();
@@ -257,9 +253,6 @@ static void MX_NVIC_Init(void)
   /* FPU_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(FPU_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(FPU_IRQn);
-  /* USART1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(USART1_IRQn, 9, 0);
-  HAL_NVIC_EnableIRQ(USART1_IRQn);
 }
 
 /* ADC1 init function */
@@ -321,25 +314,6 @@ static void MX_SDIO_SD_Init(void)
   hsd.Init.BusWide = SDIO_BUS_WIDE_1B;
   hsd.Init.HardwareFlowControl = SDIO_HARDWARE_FLOW_CONTROL_DISABLE;
   hsd.Init.ClockDiv = 1;
-
-}
-
-/* USART1 init function */
-static void MX_USART1_UART_Init(void)
-{
-
-  huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
 
 }
 
