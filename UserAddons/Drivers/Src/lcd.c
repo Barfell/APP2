@@ -101,8 +101,8 @@ void LCD_Init(void)
     hsram1.Extended->BWTR[6]|=3<<0;      //地址建立时间（ADDSET）为3个HCLK =18ns
     hsram1.Extended->BWTR[6]|=2<<8;      //数据保存时间为6ns*3个HCLK=18ns
     LCD_Init_NT35310();
+    LCD_Display_Dir(1);//横屏
   }
-  LCD_Display_Dir(1);//横屏
 }
 
 /**
@@ -1498,7 +1498,7 @@ static void LCD_Init_NT35310(void)
   LCD_WR_DATA(0x55);	//66
 
   LCD_WR_REG(0x11);
-	HAL_Delay(1);//delay_ms(100);
+  HAL_Delay(1);//delay_ms(100);
   LCD_WR_REG(0x29);
   LCD_WR_REG(0x35);
   LCD_WR_DATA(0x00);

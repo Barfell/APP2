@@ -37,7 +37,7 @@
 #include "usb_host.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "lcd.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -102,7 +102,7 @@ void RespondGuiTask(void const * argument);
 static void MX_NVIC_Init(void);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-                
+
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -110,6 +110,41 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
+void BoardInit(void)
+{
+  //解锁电机
+  HAL_GPIO_WritePin(X_MOTOR_EN_GPIO_Port, X_MOTOR_EN_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(Y_MOTOR_EN_GPIO_Port, Y_MOTOR_EN_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(Z_MOTOR_EN_GPIO_Port, Z_MOTOR_EN_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(E1_MOTOR_EN_GPIO_Port, E1_MOTOR_EN_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(E2_MOTOR_EN_GPIO_Port, E2_MOTOR_EN_Pin, GPIO_PIN_SET);
+
+  //关闭加热
+  HAL_GPIO_WritePin(PWM_HEAT_BED_GPIO_Port, PWM_HEAT_BED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(PWM_HEAT_NOZZLE_GPIO_Port, PWM_HEAT_NOZZLE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(PWM_SW_EXT_GPIO_Port, PWM_SW_EXT_Pin, GPIO_PIN_RESET);
+}
+
+void APP_LCD_Init(void)
+{
+  LCD_Init();					//LCD初始化
+  HAL_Delay(50);
+  HAL_GPIO_WritePin(LCD_LIGHT_UP_GPIO_Port, LCD_LIGHT_UP_Pin, GPIO_PIN_SET);
+  POINT_COLOR = (uint16_t)WHITE;
+}
+
+unsigned int TextPosition_y = 20;
+void APP_LCD_ShowString(uint8_t *p, uint8_t isNextLine)
+{
+  if(isNextLine) TextPosition_y += 30;
+  LCD_ShowString(80, TextPosition_y, 320, 24, 24, p);
+}
+
+void APP_LCD_Clear(uint16_t color)
+{
+  LCD_Clear(color);
+  TextPosition_y = 20;
+}
 
 /* USER CODE END 0 */
 
@@ -146,7 +181,11 @@ int main(void)
   MX_NVIC_Init();
 
   /* USER CODE BEGIN 2 */
-
+  BoardInit();
+  APP_LCD_Init();
+  APP_LCD_Clear(BLACK);
+  APP_LCD_ShowString((uint8_t *)"Start", 0);
+  APP_LCD_ShowString((uint8_t *)"...", 1);
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -215,20 +254,20 @@ int main(void)
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
- 
+
 
   /* Start scheduler */
   osKernelStart();
-  
+
   /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-  /* USER CODE END WHILE */
+    /* USER CODE END WHILE */
 
-  /* USER CODE BEGIN 3 */
+    /* USER CODE BEGIN 3 */
 
   }
   /* USER CODE END 3 */
@@ -262,7 +301,7 @@ void SystemClock_Config(void)
   }
 
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+                                |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
@@ -343,8 +382,8 @@ static void MX_ADC1_Init(void)
 
   ADC_ChannelConfTypeDef sConfig;
 
-    /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-    */
+  /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
   hadc1.Instance = ADC1;
   hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc1.Init.Resolution = ADC_RESOLUTION_10B;
@@ -361,8 +400,8 @@ static void MX_ADC1_Init(void)
     Error_Handler();
   }
 
-    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-    */
+  /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
   sConfig.Channel = ADC_CHANNEL_5;
   sConfig.Rank = 1;
   sConfig.SamplingTime = ADC_SAMPLETIME_3CYCLES;
@@ -566,19 +605,19 @@ static void MX_USB_OTG_HS_HCD_Init(void)
 
 }
 
-/** 
+/**
   * Enable DMA controller clock
   */
-static void MX_DMA_Init(void) 
+static void MX_DMA_Init(void)
 {
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
 
 }
 
-/** Configure pins as 
-        * Analog 
-        * Input 
+/** Configure pins as
+        * Analog
+        * Input
         * Output
         * EVENT_OUT
         * EXTI
@@ -597,37 +636,37 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, E2_MOTOR_STEP_Pin|E1_MOTOR_STEP_Pin|E2_MOTOR_EN_Pin|E1_MOTOR_DIR_Pin 
-                          |E2_MOTOR_DIR_Pin|E1_MOTOR_EN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, E2_MOTOR_STEP_Pin|E1_MOTOR_STEP_Pin|E2_MOTOR_EN_Pin|E1_MOTOR_DIR_Pin
+                    |E2_MOTOR_DIR_Pin|E1_MOTOR_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, T_CS_Pin|IO_FAN_5V_Pin|IO_FAN_E_Pin|LED1_Pin 
-                          |T_MOSI_Pin|X_MOTOR_EN_Pin|X_MOTOR_STEP_Pin|IO_FAN_BOARD_Pin 
-                          |Z_MOTOR_STEP_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, T_CS_Pin|IO_FAN_5V_Pin|IO_FAN_E_Pin|LED1_Pin
+                    |T_MOSI_Pin|X_MOTOR_EN_Pin|X_MOTOR_STEP_Pin|IO_FAN_BOARD_Pin
+                    |Z_MOTOR_STEP_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, PWM_BEEP_Pin|X_MOTOR_DIR_Pin|PWM_E_VREF_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, T_SCK_Pin|PWM_Z_VREF_Pin|PWM_XY_VREF_Pin|Y_MOTOR_DIR_Pin 
-                          |Y_MOTOR_EN_Pin|LCD_LIGHT_UP_Pin|Z_MOTOR_DIR_Pin|PWM_SW_EXT_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, T_SCK_Pin|PWM_Z_VREF_Pin|PWM_XY_VREF_Pin|Y_MOTOR_DIR_Pin
+                    |Y_MOTOR_EN_Pin|LCD_LIGHT_UP_Pin|Z_MOTOR_DIR_Pin|PWM_SW_EXT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, Y_MOTOR_STEP_Pin|PWM_HEAT_BED_Pin|PWM_HEAT_NOZZLE_Pin|Z_MOTOR_EN_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : E2_MOTOR_STEP_Pin E1_MOTOR_STEP_Pin E2_MOTOR_EN_Pin E1_MOTOR_DIR_Pin 
+  /*Configure GPIO pins : E2_MOTOR_STEP_Pin E1_MOTOR_STEP_Pin E2_MOTOR_EN_Pin E1_MOTOR_DIR_Pin
                            E2_MOTOR_DIR_Pin E1_MOTOR_EN_Pin */
-  GPIO_InitStruct.Pin = E2_MOTOR_STEP_Pin|E1_MOTOR_STEP_Pin|E2_MOTOR_EN_Pin|E1_MOTOR_DIR_Pin 
-                          |E2_MOTOR_DIR_Pin|E1_MOTOR_EN_Pin;
+  GPIO_InitStruct.Pin = E2_MOTOR_STEP_Pin|E1_MOTOR_STEP_Pin|E2_MOTOR_EN_Pin|E1_MOTOR_DIR_Pin
+                        |E2_MOTOR_DIR_Pin|E1_MOTOR_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : T_CS_Pin IO_FAN_5V_Pin IO_FAN_E_Pin T_MOSI_Pin 
+  /*Configure GPIO pins : T_CS_Pin IO_FAN_5V_Pin IO_FAN_E_Pin T_MOSI_Pin
                            X_MOTOR_EN_Pin X_MOTOR_STEP_Pin IO_FAN_BOARD_Pin Z_MOTOR_STEP_Pin */
-  GPIO_InitStruct.Pin = T_CS_Pin|IO_FAN_5V_Pin|IO_FAN_E_Pin|T_MOSI_Pin 
-                          |X_MOTOR_EN_Pin|X_MOTOR_STEP_Pin|IO_FAN_BOARD_Pin|Z_MOTOR_STEP_Pin;
+  GPIO_InitStruct.Pin = T_CS_Pin|IO_FAN_5V_Pin|IO_FAN_E_Pin|T_MOSI_Pin
+                        |X_MOTOR_EN_Pin|X_MOTOR_STEP_Pin|IO_FAN_BOARD_Pin|Z_MOTOR_STEP_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -659,10 +698,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : T_SCK_Pin PWM_Z_VREF_Pin PWM_XY_VREF_Pin Y_MOTOR_DIR_Pin 
+  /*Configure GPIO pins : T_SCK_Pin PWM_Z_VREF_Pin PWM_XY_VREF_Pin Y_MOTOR_DIR_Pin
                            Y_MOTOR_EN_Pin Z_MOTOR_DIR_Pin PWM_SW_EXT_Pin */
-  GPIO_InitStruct.Pin = T_SCK_Pin|PWM_Z_VREF_Pin|PWM_XY_VREF_Pin|Y_MOTOR_DIR_Pin 
-                          |Y_MOTOR_EN_Pin|Z_MOTOR_DIR_Pin|PWM_SW_EXT_Pin;
+  GPIO_InitStruct.Pin = T_SCK_Pin|PWM_Z_VREF_Pin|PWM_XY_VREF_Pin|Y_MOTOR_DIR_Pin
+                        |Y_MOTOR_EN_Pin|Z_MOTOR_DIR_Pin|PWM_SW_EXT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -770,7 +809,7 @@ void StartInitTask(void const * argument)
   {
     osDelay(1);
   }
-  /* USER CODE END 5 */ 
+  /* USER CODE END 5 */
 }
 
 /* RefDataTask function */
@@ -843,15 +882,16 @@ void RespondGuiTask(void const * argument)
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-/* USER CODE BEGIN Callback 0 */
+  /* USER CODE BEGIN Callback 0 */
 
-/* USER CODE END Callback 0 */
-  if (htim->Instance == TIM1) {
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1)
+  {
     HAL_IncTick();
   }
-/* USER CODE BEGIN Callback 1 */
+  /* USER CODE BEGIN Callback 1 */
 
-/* USER CODE END Callback 1 */
+  /* USER CODE END Callback 1 */
 }
 
 /**
@@ -863,10 +903,10 @@ void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler */
   /* User can add his own implementation to report the HAL error return state */
-  while(1) 
+  while(1)
   {
   }
-  /* USER CODE END Error_Handler */ 
+  /* USER CODE END Error_Handler */
 }
 
 #ifdef USE_FULL_ASSERT
@@ -891,10 +931,10 @@ void assert_failed(uint8_t* file, uint32_t line)
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-*/ 
+*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
